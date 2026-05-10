@@ -27,7 +27,7 @@ products.forEach((product) => {
           </div>
 
           <div class="product-quantity-container">
-            <select>
+            <select class = "productQty-${product.id}">
               <option selected value="1">1</option>
               <option value="2">2</option>
               <option value="3">3</option>
@@ -43,7 +43,7 @@ products.forEach((product) => {
 
           <div class="product-spacer"></div>
 
-          <div class="added-to-cart">
+          <div class="added-to-cart added-to-cart-${product.id}">
             <img src="images/icons/checkmark.png">
             Added
           </div>
@@ -55,19 +55,25 @@ products.forEach((product) => {
           </button>
         </div>
         `
-
+  
      
 });
 
-
+     
+  
 
   document.querySelector('.js-products-grid')
     .innerHTML = productsHTML;
 
+        const setTimer = {};
     document.querySelectorAll('.js-add-to-cart')
       .forEach((button) => {
         button.addEventListener('click', () => {
           const productId = button.dataset.productId;
+          
+           const productQty = document.querySelector(`.productQty-${productId}`).value;
+
+          const productQtyValue = Number(productQty);
 
           let matchingItem;
 
@@ -78,22 +84,42 @@ products.forEach((product) => {
           });
 
           if (matchingItem){
-            matchingItem.quantity ++;
+            matchingItem.productQtyValue += productQtyValue;
           } else {
             cart.push({
             productId,
-            quantity: 1
+           productQtyValue
           });
           
         }
         let cartQuantity = 0;
         cart.forEach((item) => {
-          cartQuantity += item.quantity;
+          cartQuantity += item.productQtyValue;
         });
+       
+          document.querySelector(`.added-to-cart-${productId}`)
+               .classList.add('js-added-to-cart');
 
+            setTimeout( () => {
+              const previousSetTimer = setTimer[productId];
+              if(previousSetTimer === setTimer[productId]){
+                clearTimeout(previousSetTimer);
+              }
+
+              const timeOutId = setTimeout(() => {
+                document.querySelector(`.added-to-cart-${productId}`)
+                 .classList.remove('js-added-to-cart');
+              }, 2000);
+
+              setTimer[productId] = timeOutId;
+            });
+            
+            
         document.querySelector('.js-cart-quantity')
           .innerHTML = cartQuantity;
+
         });
+        
       });
 
       
