@@ -1,18 +1,66 @@
-import { cart, removeFromCart, calculateCart} from "../data/cart.js";
-import { products } from "../data/products.js";
-import { formatCurrency } from "./utils/priceCents.js";
+    import { cart, removeFromCart, calculateCart} from "../data/cart.js";
+    import { products } from "../data/products.js";
+    import { formatCurrency, amountByProductQty, totalBeforeTax, totalTax, orderTotal} from "./utils/money.js";
 
-let cartSummaryHtml = '';
+    let cartSummaryHtml = '';
+    let paymentSummary = '';
+     const shippingFee = 4.99;
+     const taxFee = 0.1;
+    
 
 cart.forEach((cartItem) => {
     const productId = cartItem.productId;
     let matchingProduct;
+    
     products.forEach((product) => {
+        
         if(product.id === productId){
             matchingProduct = product;
         }
-       
+    
     });
+    
+
+    
+    console.log(orderTotal());
+    
+
+    paymentSummary += `
+                <div class="payment-summary">
+          <div class="payment-summary-title">
+            Order Summary
+          </div>
+
+          <div class="payment-summary-row">
+            <div>Items (${cartItem.productQtyValue}):</div>
+            <div class="payment-summary-money"> $${amountByProductQty(matchingProduct, cartItem)}</div>
+          </div>
+
+          <div class="payment-summary-row">
+            <div>Shipping &amp; handling:</div>
+            <div class="payment-summary-money">$4.99</div>
+          </div>
+
+          <div class="payment-summary-row subtotal-row">
+            <div>Total before tax:</div>
+            <div class="payment-summary-money">$${totalBeforeTax(matchingProduct, cartItem, shippingFee)}</div>
+          </div>
+
+          <div class="payment-summary-row">
+            <div>Estimated tax (10%):</div>
+            <div class="payment-summary-money">$${totalTax(matchingProduct, cartItem, shippingFee, taxFee)}</div>
+          </div>
+
+          <div class="payment-summary-row total-row">
+            <div>Order total:</div>
+            <div class="payment-summary-money">$52.51</div>
+          </div>
+
+          <button class="place-order-button button-primary">
+            Place your order
+          </button>
+        </div>
+        `
 
      
      cartSummaryHtml +=
@@ -95,10 +143,14 @@ cart.forEach((cartItem) => {
                 </div>
                 </div>
             `
+        
         });
 
         document.querySelector('.js-order-summary')
             .innerHTML = cartSummaryHtml;
+
+             document.querySelector('.js-payment-summary')
+            .innerHTML = paymentSummary;
 
             document.querySelectorAll('.js-delete-quantity-link')
                 .forEach((link) => {
