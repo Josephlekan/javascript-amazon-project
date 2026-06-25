@@ -209,3 +209,25 @@
   margin-top: 11px;
   margin-bottom: 15px;
 }
+
+.update-edit {
+  width: 30px;
+}
+
+.update-edit, .save-quantity-link {
+  display: none;
+}
+
+.is-editing .update-edit{
+  display: initial;
+
+}
+
+.is-editing .save-quantity-link{
+  display: initial;
+
+}
+
+.is-editing .update-quantity-link{
+  display: none;
+}

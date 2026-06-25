@@ -1,68 +1,27 @@
-    import { cart, removeFromCart, calculateCart} from "../data/cart.js";
+    import { cart, removeFromCart, calculateCart, saveToStorage, updateQuantity} from "../data/cart.js";
     import { products } from "../data/products.js";
-    import { formatCurrency, amountByProductQty, totalBeforeTax, totalTax, orderTotal} from "./utils/money.js";
+    import dayjs from 'https://unpkg.com/dayjs@1.11.10/esm/index.js';
+    import { formatCurrency} from "./utils/money.js";
 
+
+    const todayDate = dayjs();
+    const deliveryDate = todayDate.add(7, 'days');
+    const deliveryDateExact = deliveryDate.format('dddd, MMMM D');
+    console.log(deliveryDateExact);
+
+  
     let cartSummaryHtml = '';
-    let paymentSummary = '';
-     const shippingFee = 4.99;
-     const taxFee = 0.1;
-    
-
-cart.forEach((cartItem) => {
+    cart.forEach((cartItem) => {
     const productId = cartItem.productId;
     let matchingProduct;
-    
     products.forEach((product) => {
-        
         if(product.id === productId){
             matchingProduct = product;
         }
     
     });
     
-
     
-    console.log(orderTotal());
-    
-
-    paymentSummary += `
-                <div class="payment-summary">
-          <div class="payment-summary-title">
-            Order Summary
-          </div>
-
-          <div class="payment-summary-row">
-            <div>Items (${cartItem.productQtyValue}):</div>
-            <div class="payment-summary-money"> $${amountByProductQty(matchingProduct, cartItem)}</div>
-          </div>
-
-          <div class="payment-summary-row">
-            <div>Shipping &amp; handling:</div>
-            <div class="payment-summary-money">$4.99</div>
-          </div>
-
-          <div class="payment-summary-row subtotal-row">
-            <div>Total before tax:</div>
-            <div class="payment-summary-money">$${totalBeforeTax(matchingProduct, cartItem, shippingFee)}</div>
-          </div>
-
-          <div class="payment-summary-row">
-            <div>Estimated tax (10%):</div>
-            <div class="payment-summary-money">$${totalTax(matchingProduct, cartItem, shippingFee, taxFee)}</div>
-          </div>
-
-          <div class="payment-summary-row total-row">
-            <div>Order total:</div>
-            <div class="payment-summary-money">$52.51</div>
-          </div>
-
-          <button class="place-order-button button-primary">
-            Place your order
-          </button>
-        </div>
-        `
-
-     
      cartSummaryHtml +=
     
         `
@@ -82,15 +41,22 @@ cart.forEach((cartItem) => {
                     <div class="product-price">
                     $${formatCurrency(matchingProduct.priceCents)}
                     </div>
-                    <div class="product-quantity">
+                    <div class="product-quantity"
+                        data-product-Id = ${matchingProduct.id}>
                         <span>
-                        Quantity: <span class="quantity-label">${cartItem.productQtyValue}</span>
+                        Quantity: <span class="quantity-label-${matchingProduct.id}">${cartItem.productQtyValue}</span>
                         </span>
-                        <span class="update-quantity-link link-primary">
+                        <span class="update-quantity-link js-update-quantity-link link-primary"
+                          data-product-Id = ${matchingProduct.id}>
                         Update
                         </span>
+                        <input type="text" class="update-edit js-update-edit-${matchingProduct.id}">
+                        <span class="save-quantity-link js-save-quantity-link link-primary"
+                         data-product-Id = ${matchingProduct.id}>
+                        Save
+                        </span>
                         <span class="delete-quantity-link  js-delete-quantity-link 
-                            link-primary" data-product-id = ${matchingProduct.id} >
+                            link-primary" data-product-Id = ${matchingProduct.id} >
                         Delete
                         </span>
                     </div>
@@ -143,15 +109,20 @@ cart.forEach((cartItem) => {
                 </div>
                 </div>
             `
-        
+            
         });
 
+        
         document.querySelector('.js-order-summary')
             .innerHTML = cartSummaryHtml;
 
-             document.querySelector('.js-payment-summary')
-            .innerHTML = paymentSummary;
 
+        
+            function deliveryDetail(){
+
+            }
+         
+    
             document.querySelectorAll('.js-delete-quantity-link')
                 .forEach((link) => {
                     link.addEventListener('click', () => {
@@ -162,10 +133,55 @@ cart.forEach((cartItem) => {
                         updateCartQty();
                     });
                 });
+                
+                
+            
+                document.querySelectorAll('.js-update-quantity-link')
+                    .forEach((update) => {
+                        const productId = update.dataset.productId;
+                        update.addEventListener('click', () => {
+                        const newQuantity = (document.querySelector(`.js-update-edit-${productId}`));
+                        const oldQuantity = (document.querySelector(`.quantity-label-${productId}`));; 
+                        newQuantity.value = Number(oldQuantity.innerHTML);
+                        document.querySelector(`.js-cart-item-container-${productId}`)
+                            .classList.add('is-editing');
+                        });
+                    });
 
-        function updateCartQty(){
+                
+                
+                document.querySelectorAll('.js-save-quantity-link')
+                    .forEach((save) => {
+                        save.addEventListener('click', () => {
+                        const productId = save.dataset.productId
+                        console.log('I am working');
+                        const newQuantity = (document.querySelector(`.js-update-edit-${productId}`));
+                        const oldQuantity = document.querySelector(`.quantity-label-${productId}`);
+                        let newQuantityValue = newQuantity.value;
+                        let oldQuantityValue = Number(oldQuantity.innerHTML);
+                        document.querySelector(`.js-cart-item-container-${productId}`)
+                        .classList.remove('is-editing');
+                        if(newQuantityValue < 1){
+                            newQuantity.value = Number(oldQuantity.innerHTML);
+                            alert(`Cart can't be empty`);
+                            return;
+                        }
+                        else if(!Number(newQuantity.value)){
+                            newQuantityValue = oldQuantityValue;
+                            alert(`Cart can only be numbers`);
+                            return;
+                        }
+                        updateQuantity(productId, newQuantityValue);
+                        updateCartQty();
+                        });
+                    });
+
+        
+                
+   export function updateCartQty(){
             const cartQuantity = calculateCart();
             document.querySelector('.js-cartQty').innerHTML = `${cartQuantity} items`;
         }
-
         updateCartQty();
+
+       

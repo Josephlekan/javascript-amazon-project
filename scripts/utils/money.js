@@ -16,8 +16,4 @@ export function totalTax(matchingProduct, cartItem, shippingFee, taxFee){
 }
 
 
-export function orderTotal(){
-   return(amountByProductQty(matchingProduct,cartItem) + totalBeforeTax(matchingProduct,cartItem, shippingFee) + totalTax(matchingProduct,cartItem, shippingFee, taxFee)).toFixed(2);
-}
-
 
