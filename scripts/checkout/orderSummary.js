@@ -1,8 +1,9 @@
     import { cart, removeFromCart, calculateCart, saveToStorage, updateQuantity, updateCartDeliveryOption} from "../../data/cart.js";
     import { products, getProduct } from "../../data/products.js";
-    import { deliveryOptionCost} from "../../data/reviewOrder.js";
+    import { deliveryOptionCost, getDeliveryId} from "../../data/reviewOrder.js";
     import dayjs from 'https://unpkg.com/dayjs@1.11.10/esm/index.js';
     import { formatCurrency} from "../utils/money.js";
+    import { paymentSummary } from "./paymentSummary.js";
 
 
     const todayDate = dayjs();
@@ -13,18 +14,10 @@
   export function renderOrderSummarry(){
         let cartSummaryHtml = '';
         cart.forEach((cartItem) => {
-        const productId = cartItem.productId;
-        const matchingProduct = getProduct(productId);
-        const deliveryOptionId = Number(cartItem.deliveryOptionId);
-        let deliveryOption;
-        deliveryOptionCost.forEach((option) => {
-        if(option.id === deliveryOptionId){
-            deliveryOption = option;
-        }
-        });
-        
-        
-        
+            const productId = cartItem.productId;
+            const matchingProduct = getProduct(productId);
+            const deliveryOptionId = cartItem.deliveryOptionId;
+            const deliveryOption = getDeliveryId(deliveryOptionId)
             const todayDate = dayjs();
             const deliveryDate = todayDate.add(deliveryOption.deliveryDays, 'days');
             const preferredDeliveryDate = deliveryDate.format('dddd, MMMM D');
@@ -35,7 +28,7 @@
                 <div class="cart-item-container js-cart-item-container-${matchingProduct.id}">
                     <div class="delivery-date"
                     data-deliver-id = ${deliveryOptionId}>
-                        Delivery date: ${preferredDeliveryDate}
+                        Delivery date: ${preferredDeliveryDate};
                     </div>
 
                     <div class="cart-item-details-grid">
@@ -91,7 +84,8 @@
                         const deliveryDate = todayDate.add(deliveryOption.deliveryDays, 'days');
                         const preferredDeliveryDate = deliveryDate.format('dddd, MMMM D');
                         const shippingCost = deliveryOption.priceCents === 0 ? 'Free-' : `$${formatCurrency(deliveryOption.priceCents)}-`
-                        const isChecked = deliveryOption.id === Number(cartItem.deliveryOptionId);
+                        const isChecked = deliveryOption.id === cartItem.deliveryOptionId;
+                        console.log(isChecked);
                         
                         orderSummaryHtml += `
                         
@@ -170,25 +164,23 @@
                             });
                         });
 
-            
+        
                     
-     function updateCartQty(){
+            function updateCartQty(){
                 const cartQuantity = calculateCart();
                 document.querySelector('.js-cartQty').innerHTML = `${cartQuantity} items`;
-            }
-        updateCartQty();
+                    }
+                updateCartQty();
 
-        document.querySelectorAll('.js-delivery-option')
-            .forEach((elements) => {
-                elements.addEventListener('click', () => {
-                    const {productId, deliveryOptionId, deliverId} = elements.dataset;
-                    updateCartDeliveryOption(productId, deliveryOptionId);
-                    renderOrderSummarry();
-                    console.log(deliveryOptionId);
-                    console.log(productId);
-                });
-            });
-
-        }
-
+                document.querySelectorAll('.js-delivery-option')
+                    .forEach((elements) => {
+                        elements.addEventListener('click', () => {
+                            const {productId, deliveryOptionId, deliverId} = elements.dataset;
+                            updateCartDeliveryOption(productId, deliveryOptionId);
+                            renderOrderSummarry();
+                            paymentSummary();
+                        });       
+                    });
+                }
+                
         renderOrderSummarry();
