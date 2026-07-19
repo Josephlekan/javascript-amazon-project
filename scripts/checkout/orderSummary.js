@@ -1,15 +1,9 @@
-    import { cart, removeFromCart, calculateCart, saveToStorage, updateQuantity, updateCartDeliveryOption} from "../../data/cart.js";
+    import { cart, removeFromCart, calculateCart, saveToStorage, updateQuantity, updateCartDeliveryOption, formatQty} from "../../data/cart.js";
     import { products, getProduct } from "../../data/products.js";
     import { deliveryOptionCost, getDeliveryId} from "../../data/reviewOrder.js";
     import dayjs from 'https://unpkg.com/dayjs@1.11.10/esm/index.js';
     import { formatCurrency} from "../utils/money.js";
     import { paymentSummary } from "./paymentSummary.js";
-
-
-    const todayDate = dayjs();
-    const deliveryDate = todayDate.add(7, 'days');
-    const deliveryDateExact = deliveryDate.format('dddd, MMMM D');
-    console.log(deliveryDateExact);
 
   export function renderOrderSummarry(){
         let cartSummaryHtml = '';
@@ -17,7 +11,7 @@
             const productId = cartItem.productId;
             const matchingProduct = getProduct(productId);
             const deliveryOptionId = cartItem.deliveryOptionId;
-            const deliveryOption = getDeliveryId(deliveryOptionId)
+            const deliveryOption = getDeliveryId(deliveryOptionId);
             const todayDate = dayjs();
             const deliveryDate = todayDate.add(deliveryOption.deliveryDays, 'days');
             const preferredDeliveryDate = deliveryDate.format('dddd, MMMM D');
@@ -119,6 +113,7 @@
                             container.remove();
                             removeFromCart(productId); 
                             updateCartQty();
+                            paymentSummary();
                         });
                     });
                     
@@ -133,6 +128,7 @@
                             newQuantity.value = Number(oldQuantity.innerHTML);
                             document.querySelector(`.js-cart-item-container-${productId}`)
                                 .classList.add('is-editing');
+                           
                             });
                         });
 
@@ -161,6 +157,7 @@
                             }
                             updateQuantity(productId, newQuantityValue);
                             updateCartQty();
+                            paymentSummary();
                             });
                         });
 
@@ -168,7 +165,7 @@
                     
             function updateCartQty(){
                 const cartQuantity = calculateCart();
-                document.querySelector('.js-cartQty').innerHTML = `${cartQuantity} items`;
+                document.querySelector('.js-cartQty').innerHTML = `${formatQty(cartQuantity)} items`;
                     }
                 updateCartQty();
 

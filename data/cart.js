@@ -89,4 +89,8 @@ export function addToCart(productId){
     saveToStorage();
  }
 
+ export function formatQty(qty){
+   return qty.toLocaleString('en-US');
+ }
+
    

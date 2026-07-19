@@ -6,7 +6,7 @@ import { getDeliveryId } from "../../data/reviewOrder.js";
 export function paymentSummary(){
 
     updateQuantity();
-    const cartQuantity = calculateCart();
+        const cartQuantity = calculateCart();
         let productPriceCent = 0;
         let shippingCostCent = 0;
         let totalBeforeTax;
