@@ -1,4 +1,3 @@
-    
 
 export let cart = JSON.parse(localStorage.getItem('cart'));
 
@@ -21,7 +20,7 @@ if (!cart){
             if(productId === cartItem.productId){
                 cartItem.productQtyValue = Number(newQuantityValue);  
                 console.log(newQuantityValue);
-               document.querySelector(`.quantity-label-${productId}`).innerHTML = Number(newQuantityValue);
+                document.querySelector(`.quantity-label-${productId}`).innerHTML = Number(newQuantityValue);
         }
         });
             saveToStorage();

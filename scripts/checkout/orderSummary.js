@@ -4,6 +4,8 @@
     import dayjs from 'https://unpkg.com/dayjs@1.11.10/esm/index.js';
     import { formatCurrency} from "../utils/money.js";
     import { paymentSummary } from "./paymentSummary.js";
+    
+    console.log('what up?');
 
   export function renderOrderSummarry(){
         let cartSummaryHtml = '';

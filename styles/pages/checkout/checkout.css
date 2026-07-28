@@ -218,15 +218,11 @@
   display: none;
 }
 
-.is-editing .update-edit{
+.is-editing .update-edit,
+.is-editing .save-quantity-link {
   display: initial;
-
 }
 
-.is-editing .save-quantity-link{
-  display: initial;
-
-}
 
 .is-editing .update-quantity-link{
   display: none;
