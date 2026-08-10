@@ -5,8 +5,6 @@
     import { formatCurrency} from "../utils/money.js";
     import { paymentSummary } from "./paymentSummary.js";
     
-    console.log('what up?');
-
   export function renderOrderSummarry(){
         let cartSummaryHtml = '';
         cart.forEach((cartItem) => {
@@ -21,7 +19,7 @@
         cartSummaryHtml +=
         
             `
-                <div class="cart-item-container js-cart-item-container-${matchingProduct.id}">
+                <div class="cart-item-container js-cart-item-container js-cart-item-container-${matchingProduct.id}">
                     <div class="delivery-date"
                     data-deliver-id = ${deliveryOptionId}>
                         Delivery date: ${preferredDeliveryDate};
@@ -38,7 +36,7 @@
                         <div class="product-price">
                         $${formatCurrency(matchingProduct.priceCents)}
                         </div>
-                        <div class="product-quantity"
+                        <div class="product-quantity js-product-quantity-${matchingProduct.id}"
                             data-product-id = ${matchingProduct.id}>
                             <span>
                             Quantity: <span class="quantity-label-${matchingProduct.id}">${cartItem.productQtyValue}</span>
@@ -52,7 +50,7 @@
                             data-product-id = ${matchingProduct.id}>
                             Save
                             </span>
-                            <span class="delete-quantity-link  js-delete-quantity-link 
+                            <span class="delete-quantity-link  js-delete-quantity-link js-delete-link-${matchingProduct.id}
                                 link-primary" data-product-id = ${matchingProduct.id} >
                             Delete
                             </span>
@@ -182,4 +180,4 @@
                     });
                 }
                 
-        renderOrderSummarry();
+        
