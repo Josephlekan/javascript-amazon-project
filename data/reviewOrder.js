@@ -1,7 +1,7 @@
 export const deliveryOptionCost = [{
     id: '1',
     priceCents: 0,
-    deliveryDays: 1
+    deliveryDays: 3
 }, {
     id: '2',
     priceCents: 499,
@@ -9,7 +9,7 @@ export const deliveryOptionCost = [{
 }, {
     id: '3',
     priceCents: 999,
-    deliveryDays: 3
+    deliveryDays: 1
 }];
 
 

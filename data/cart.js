@@ -80,6 +80,15 @@ export function loadFromStorage (){
         return cartQuantity;
     }
 
+  export function notUpdateCartDeliveryOption(productId, deliveryOptionId){
+    let matchinItem = '';
+    cart.forEach((cartItem) => {
+        if(productId !== cartItem.productId){
+            return;
+        }
+    })
+  }
+
 
  export function updateCartDeliveryOption(productId, deliveryOptionId){
     let matchingItem = '';
