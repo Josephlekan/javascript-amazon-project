@@ -24,8 +24,7 @@ export function loadFromStorage (){
     export function updateQuantity(productId, newQuantityValue){       
         cart.forEach((cartItem) => {
             if(productId === cartItem.productId){
-                cartItem.productQtyValue = Number(newQuantityValue);  
-                console.log(newQuantityValue);
+                cartItem.productQtyValue = Number(newQuantityValue);
                 document.querySelector(`.quantity-label-${productId}`).innerHTML = Number(newQuantityValue);
         }
         });

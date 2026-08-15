@@ -21,11 +21,11 @@ export function paymentSummary(){
         totalTax = totalBeforeTax * 0.1;
         totalCost = totalBeforeTax + totalTax;
     });
-    console.log(formatCurrency(productPriceCent));
+   /* console.log(formatCurrency(productPriceCent));
     console.log(formatCurrency(shippingCostCent));
     console.log(formatCurrency(totalBeforeTax));
     console.log(formatCurrency(totalTax));
-    console.log(formatCurrency(totalCost));
+    console.log(formatCurrency(totalCost)); */
 
       const paymentHtml = `
         <div class="payment-summary-title">

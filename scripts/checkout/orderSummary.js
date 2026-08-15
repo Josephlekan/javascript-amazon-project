@@ -79,7 +79,6 @@
                         const preferredDeliveryDate = deliveryDate.format('dddd, MMMM D');
                         const shippingCost = deliveryOption.priceCents === 0 ? 'Free-' : `$${formatCurrency(deliveryOption.priceCents)}-`
                         const isChecked = deliveryOption.id === cartItem.deliveryOptionId;
-                        console.log(isChecked);
                         
                         orderSummaryHtml += `
                         
@@ -138,7 +137,6 @@
                         .forEach((save) => {
                             save.addEventListener('click', () => {
                             const productId = save.dataset.productId
-                            console.log('I am working');
                             const newQuantity = (document.querySelector(`.js-update-edit-${productId}`));
                             const oldQuantity = document.querySelector(`.quantity-label-${productId}`);
                             let newQuantityValue = newQuantity.value;
