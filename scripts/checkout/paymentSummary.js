@@ -4,7 +4,7 @@ import { formatCurrency } from "../utils/money.js";
 import { getDeliveryId } from "../../data/reviewOrder.js";
 
 export function paymentSummary(){
-
+   
     updateQuantity();
         const cartQuantity = calculateCart();
         let productPriceCent = 0;
@@ -20,12 +20,8 @@ export function paymentSummary(){
         totalBeforeTax = productPriceCent + shippingCostCent;
         totalTax = totalBeforeTax * 0.1;
         totalCost = totalBeforeTax + totalTax;
+          
     });
-   /* console.log(formatCurrency(productPriceCent));
-    console.log(formatCurrency(shippingCostCent));
-    console.log(formatCurrency(totalBeforeTax));
-    console.log(formatCurrency(totalTax));
-    console.log(formatCurrency(totalCost)); */
 
       const paymentHtml = `
         <div class="payment-summary-title">
