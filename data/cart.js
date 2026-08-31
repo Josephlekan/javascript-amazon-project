@@ -25,7 +25,7 @@ export function loadFromStorage (){
         cart.forEach((cartItem) => {
             if(productId === cartItem.productId){
                 cartItem.productQtyValue = Number(newQuantityValue);
-                document.querySelector(`.quantity-label-${productId}`).innerHTML = Number(newQuantityValue);
+                document.querySelector(`.quantity-label-${productId}`).innerHTML = newQuantityValue;
         }
         });
             saveToStorage();

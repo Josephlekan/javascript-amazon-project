@@ -1,8 +1,14 @@
 import { renderOrderSummarry } from "./checkout/orderSummary.js";
 import { paymentSummary } from "./checkout/paymentSummary.js";
-//import '../data/cart-class.js';
+import {cars} from "../data/car.js";
 
-
+cars.forEach((car) => {
+     car.go();
+     car.brake();
+     car.openTrunk();
+     car.closeTrunk();
+     car.displayInfo();
+}); 
 
 renderOrderSummarry();
 

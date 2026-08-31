@@ -81,7 +81,7 @@ class Cart {
     }
 
     notUpdateCartDeliveryOption(productId, deliveryOptionId){
-    let matchinItem = '';
+    let matchingItem = '';
     this.cartItems.forEach((cartItem) => {
         if(productId !== cartItem.productId){
             return;
